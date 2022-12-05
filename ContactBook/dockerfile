@@ -1,0 +1,10 @@
+FROM python:3.10
+
+LABEL org.opencontainers.image.authors="https://github.com/Vasyl-Hlushchenko"
+
+COPY . /app
+
+WORKDIR /app
+
+ENTRYPOINT ["bot"]
+CMD ["main.py"]
