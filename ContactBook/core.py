@@ -26,7 +26,9 @@ class AddressBook(UserDict):
 
 
 class Record:
-    def __init__(self, name, phone=None, birthday=None, note=None, address=None, email=None):
+    def __init__(
+        self, name, phone=None, birthday=None, note=None, address=None, email=None
+    ):
         self.name = Name(name)
         self.phones = [Phone(phone)] if phone else []
         self.birthday = Birthday(birthday) if birthday else ""
@@ -36,7 +38,7 @@ class Record:
         self.tag = {}
 
     def add_birthday(self, birthday):
-        self.birthday = Birthday(birthday).value.strftime('%d.%m.%Y')
+        self.birthday = Birthday(birthday).value.strftime("%d.%m.%Y")
 
     def add_phone(self, phone):
         self.phones.append(Phone(phone))
@@ -72,25 +74,30 @@ class Record:
 
     def days_to_birthday(self):
         if self.birthday:
-            birthday = datetime.strptime(self.birthday, '%d.%m.%Y')
+            birthday = datetime.strptime(self.birthday, "%d.%m.%Y")
             if ((birthday).replace(year=(datetime.now()).year)) > datetime.now():
                 print(
-                    f"to birthday {(((birthday).replace(year=(datetime.now()).year)) - datetime.now()).days} days")
+                    f"to birthday {(((birthday).replace(year=(datetime.now()).year)) - datetime.now()).days} days"
+                )
             else:
                 print(
-                    f"to birthday {(((birthday).replace(year=(datetime.now()).year + 1)) - datetime.now()).days} days")
+                    f"to birthday {(((birthday).replace(year=(datetime.now()).year + 1)) - datetime.now()).days} days"
+                )
         else:
             return TypeError
 
     def interval_birthday(self, interval):
         if self.birthday:
-            birthday = datetime.strptime(self.birthday, '%d.%m.%Y')
+            birthday = datetime.strptime(self.birthday, "%d.%m.%Y")
             if ((birthday).replace(year=(datetime.now()).year)) > datetime.now():
                 diference = (
-                    ((birthday).replace(year=(datetime.now()).year)) - datetime.now()).days
+                    ((birthday).replace(year=(datetime.now()).year)) - datetime.now()
+                ).days
             else:
                 diference = (
-                    ((birthday).replace(year=(datetime.now()).year + 1)) - datetime.now()).days
+                    ((birthday).replace(year=(datetime.now()).year + 1))
+                    - datetime.now()
+                ).days
             if diference <= interval:
                 print(f"{(self.name.value).capitalize()}, birthday: {self.birthday}")
 
@@ -116,9 +123,8 @@ class Name(Field):
 class Phone(Field):
     @Field.value.setter
     def value(self, value: str):
-        if not all((value.startswith('+380'), value[1:].isdigit(), len(value) == 13)):
-            raise ValueError(
-                print("Your phone should be like this: +380888888888"))
+        if not all((value.startswith("+380"), value[1:].isdigit(), len(value) == 13)):
+            raise ValueError(print("Your phone should be like this: +380888888888"))
         self._value = value
 
 
@@ -126,26 +132,24 @@ class Birthday(Field):
     @Field.value.setter
     def value(self, value):
         try:
-            birthday = datetime.strptime(value, '%d.%m.%Y')
+            birthday = datetime.strptime(value, "%d.%m.%Y")
             self._value = birthday
         except:
-            raise ValueError(
-                print("Your birthday should be like this: 20.12.2000"))
+            raise ValueError(print("Your birthday should be like this: 20.12.2000"))
 
     def __str__(self) -> str:
-        return datetime.strftime(self._value, '%d.%m.%Y')
+        return datetime.strftime(self._value, "%d.%m.%Y")
 
 
 class Email(Field):
     @Field.value.setter
     def value(self, value: str):
         if not re.search("[a-zA-Z][a-zA-Z0-9_.]+@\w+\.\w\w+", value):
-            raise ValueError(
-                print("Your email should be like this: example@gmail.com"))
+            raise ValueError(print("Your email should be like this: example@gmail.com"))
         self._value = value
 
     def __str__(self) -> str:
-        return (self.value)
+        return self.value
 
 
 class Note(Field):
@@ -184,14 +188,21 @@ class Bot(IBot):
 
     def show_contacts(self):
         for name in self.data:
-            print("{:<10}{:^35}{:>10}".format((self.data[name].name.value).capitalize(),
-            " ".join([phone.value for phone in self.data[name].phones]), self.data[name].birthday)) 
+            print(
+                "{:<10}{:^35}{:>10}".format(
+                    (self.data[name].name.value).capitalize(),
+                    " ".join([phone.value for phone in self.data[name].phones]),
+                    self.data[name].birthday,
+                )
+            )
 
     def show_notes(self):
         show_list = []
         for name in self.data:
             if self.data[name].note:
-                show_list.append(f"name: {(self.data[name].name.value).capitalize()}, note: {self.data[name].note}")
+                show_list.append(
+                    f"name: {(self.data[name].name.value).capitalize()}, note: {self.data[name].note}"
+                )
         if show_list:
             for item in show_list:
                 print(item)
@@ -204,20 +215,22 @@ class Bot(IBot):
             if self.data[name].tag:
                 show_list.append(self.data[name].tag)
         if show_list:
-            show_list = sorted(show_list, key=lambda x: x['tag'])
+            show_list = sorted(show_list, key=lambda x: x["tag"])
             for item in show_list:
                 print(item)
         else:
             raise TypeError
-    
+
     def show_address(self):
         show_list = []
         for name in self.data:
             if self.data[name].address:
-                show_list.append(f"name: {(self.data[name].name.value).capitalize()}, address: {self.data[name].address.value}")
+                show_list.append(
+                    f"name: {(self.data[name].name.value).capitalize()}, address: {self.data[name].address.value}"
+                )
         if show_list:
-                for item in show_list:
-                    print(item)
+            for item in show_list:
+                print(item)
         else:
             raise TypeError
 
@@ -225,9 +238,11 @@ class Bot(IBot):
         show_list = []
         for name in self.data:
             if self.data[name].email:
-                show_list.append(f"name: {(self.data[name].name.value).capitalize()}, email: {self.data[name].email}")
+                show_list.append(
+                    f"name: {(self.data[name].name.value).capitalize()}, email: {self.data[name].email}"
+                )
         if show_list:
-                for item in show_list:
-                    print(item)
+            for item in show_list:
+                print(item)
         else:
             raise TypeError

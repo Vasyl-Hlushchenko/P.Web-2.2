@@ -13,16 +13,17 @@ def input_error(handler):
         except (ValueError, IndexError, UnboundLocalError):
             print("Error. Give me correct name, phone, birthday or email, please")
         except TypeError:
-            print('Cannot exist')
+            print("Cannot exist")
         except KeyError:
             print("Some error")
+
     return wrapper
 
 
 def hello_handler():
     print("Hello user i have this commands\n")
     for com in COMMANDS:
-        print('{:<23} - {:>27}'.format(com, COMMANDS[com][-1]))
+        print("{:<23} - {:>27}".format(com, COMMANDS[com][-1]))
 
 
 def quit_handler():
@@ -32,7 +33,7 @@ def quit_handler():
 
 
 @input_error
-def add_contact_handler(var):    
+def add_contact_handler(var):
     name, phone = var.split()[0], var.split()[1]
     if name in CONTACTS:
         record = CONTACTS.data[name]
@@ -47,7 +48,6 @@ def del_contact_handler(var):
     if name in CONTACTS:
         record = Record(name)
         CONTACTS.del_record(record)
-
 
 
 @input_error
@@ -114,8 +114,10 @@ def find_com(var):
         command_dict["command"] = command
         command_dict["count"] = count
         command_list.append(command_dict)
-    command_list = sorted(command_list, key=lambda x: x['count'], reverse=True)
-    print(f"You are looking for '{var}', the most suitable command is: {list(command_list[0].values())[0]}")
+    command_list = sorted(command_list, key=lambda x: x["count"], reverse=True)
+    print(
+        f"You are looking for '{var}', the most suitable command is: {list(command_list[0].values())[0]}"
+    )
 
 
 @input_error
@@ -124,11 +126,13 @@ def find(var):
     for name, record in CONTACTS.items():
         if re.search(var, name):
             show_list.append(
-                f"{name.capitalize()}: {[phone.value for phone in record.phones]}")
+                f"{name.capitalize()}: {[phone.value for phone in record.phones]}"
+            )
         for phone in record.phones:
             if re.search(var, phone.value):
                 show_list.append(
-                    f"{name.capitalize()}: {[phone.value for phone in record.phones]}")
+                    f"{name.capitalize()}: {[phone.value for phone in record.phones]}"
+                )
     if not show_list:
         raise TypeError
     print(f"You are looking for '{var}', the most suitable contact is: {show_list}")
@@ -152,7 +156,7 @@ def add_note_handler(var):
 
 @input_error
 def show_notes_handler():
-    Bot(CONTACTS).show_notes() 
+    Bot(CONTACTS).show_notes()
 
 
 @input_error
@@ -165,7 +169,7 @@ def add_tag_handler(var):
             record.add_tag(tag)
             return True
         else:
-            raise TypeError 
+            raise TypeError
     raise ValueError
 
 
@@ -260,43 +264,43 @@ def show_email_handler():
 
 
 COMMANDS = {
-    "hello": [hello_handler, 'show commands'],
-    "add": [add_contact_handler, '[name] [phone]'],
-    "del": [del_contact_handler, '[name]'],
-    "add birthday": [add_birthday_handler, '[name] [dd.mm.yyyy]'],
-    "add address": [add_address_handler, '[name] [address]'],
-    "add note": [add_note_handler, '[name] [note]'],
-    "add tag": [add_tag_handler, '[name] [tag]'],
-    "add email": [add_email_handler, '[name] [email]'],
-    "change note": [change_note_handler, '[name] [new_note]'],
-    "delete note": [delete_note_handler, '[name]'],
-    "change phone": [change_contact_handler, '[name] [phone] [new_phone]'],
-    "delete phone": [delete_contact_handler, '[name] [number]'],
-    "find phone": [find_contact_handler, '[name]'],
-    "find tag": [find_tag_handler, '[tag_name]'],
-    "all tags": [show_tags_handler, 'show all tags'],
-    "all notes": [show_notes_handler, 'show all notes'],
-    "all emails": [show_email_handler, 'show all emails'],
-    "all address": [show_address_handler, 'show all address'],
-    "show all": [show_contacts_handler, 'show all contacts'],
-    "birthday": [days_to_birthday_handler, '[name]'],
-    "to birthday": [show_list_birthday_handler, '[number of days]'],
-    "sort": [clean_folder, 'to sort your folder'],
-    "exit": [quit_handler, 'exit program']
+    "hello": [hello_handler, "show commands"],
+    "add": [add_contact_handler, "[name] [phone]"],
+    "del": [del_contact_handler, "[name]"],
+    "add birthday": [add_birthday_handler, "[name] [dd.mm.yyyy]"],
+    "add address": [add_address_handler, "[name] [address]"],
+    "add note": [add_note_handler, "[name] [note]"],
+    "add tag": [add_tag_handler, "[name] [tag]"],
+    "add email": [add_email_handler, "[name] [email]"],
+    "change note": [change_note_handler, "[name] [new_note]"],
+    "delete note": [delete_note_handler, "[name]"],
+    "change phone": [change_contact_handler, "[name] [phone] [new_phone]"],
+    "delete phone": [delete_contact_handler, "[name] [number]"],
+    "find phone": [find_contact_handler, "[name]"],
+    "find tag": [find_tag_handler, "[tag_name]"],
+    "all tags": [show_tags_handler, "show all tags"],
+    "all notes": [show_notes_handler, "show all notes"],
+    "all emails": [show_email_handler, "show all emails"],
+    "all address": [show_address_handler, "show all address"],
+    "show all": [show_contacts_handler, "show all contacts"],
+    "birthday": [days_to_birthday_handler, "[name]"],
+    "to birthday": [show_list_birthday_handler, "[number of days]"],
+    "sort": [clean_folder, "to sort your folder"],
+    "exit": [quit_handler, "exit program"],
 }
 
 
 def main():
     while True:
         var = (input("Enter command: ")).lower().strip()
-        if var in COMMANDS and COMMANDS[var][-1].endswith(']'):
-            args = input('Enter arguments: ')
+        if var in COMMANDS and COMMANDS[var][-1].endswith("]"):
+            args = input("Enter arguments: ")
             COMMANDS[var][0](args)
-            print('Done')
+            print("Done")
             continue
         elif var in COMMANDS:
             COMMANDS[var][0]()
-            print('Done')
+            print("Done")
             continue
         else:
             try:
