@@ -1,10 +1,19 @@
 FROM python:3.10
 
-LABEL org.opencontainers.image.authors="https://github.com/Vasyl-Hlushchenko"
-
-COPY . /app
+# LABEL org.opencontainers.image.authors="https://github.com/Vasyl-Hlushchenko"
 
 WORKDIR /app
 
-ENTRYPOINT ["bot"]
-CMD ["main.py"]
+ENV POETRY_VIRTUALENVS_CREATE = False
+
+RUN pip install poetry
+
+COPY ["poetry.lock", "pyproject.toml", "/app/"]
+
+RUN poetry install --no-ansi --no-interaction
+
+COPY . /app
+
+CMD ["python", "main.py"]
+
+# ENTRYPOINT ["bot"]
